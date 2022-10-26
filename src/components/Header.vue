@@ -3,13 +3,13 @@
     <el-header style="background-color: #343a40">
       <el-row type="flex" class="nav-menu" justify="start">
         <a class="el-link" href="#/index">
-          <el-image :src="require('@/assets/logo.png')" style="width: 30px; height: 30px; padding-right: 5px"></el-image>
+          <!-- <el-image :src="require('@/assets/logo.png')" style="width: 30px; height: 30px; padding-right: 5px"></el-image> -->
           Nonlinear Optical</a
         >
-        <el-menu class="sm-hide" :default-active="active_index" mode="horizontal" router background-color="#43484d" text-color="#fff" active-text-color="#ffd04b" style="margin-left: 10px">
+        <el-menu class="sm-hide" :default-active="'/home'" mode="horizontal" router background-color="#43484d" text-color="#fff" active-text-color="#ffd04b" style="margin-left: 10px">
           <template v-for="item in menu_items">
             <el-submenu :index="item.index" v-if="item.submenu" :disabled="item.disabled">
-              <template slot="title">{{ item.text }}</template>
+              <template v-slot:title>{{ item.text }}</template>
               <el-menu-item :index="it.index" v-for="it in item.items" :key="it.index">{{ it.text }}</el-menu-item>
             </el-submenu>
             <el-menu-item :disabled="item.disabled" :index="item.index" v-else>{{ item.text }}</el-menu-item>
@@ -27,8 +27,8 @@ export default {
     return {
       menu_items: [
         {
-          index: '/index',
-          text: 'Search',
+          index: '/home',
+          text: 'Home',
           submenu: false,
           disabled: false
         },
@@ -66,12 +66,12 @@ export default {
 }
 </script>
 
-<style scoped>
+<style scoped lang="less">
 .nav-menu {
   border-bottom: solid 1px #e6e6e6 !important;
-}
-.nav-menu >>> .el-menu {
-  border-bottom: 0;
+  :deep(.el-menu) {
+    border-bottom: 0;
+  }
 }
 .el-link {
   font-size: 1.2rem;
@@ -80,7 +80,7 @@ export default {
 .el-header {
   padding-left: 15px;
 }
-.sm-hide >>> li {
-  font-size: 1rem;
-}
+// .sm-hide >>> li {
+//   font-size: 1rem;
+// }
 </style>
