@@ -1,6 +1,9 @@
 <template>
   <Header />
-  <router-view></router-view>
+  <br />
+  <div class="container">
+    <router-view></router-view>
+  </div>
   <Footer />
 </template>
 
@@ -15,5 +18,9 @@ h1 {
   i {
     color: red;
   }
+}
+.container {
+  width: 1080px;
+  margin: auto;
 }
 </style>

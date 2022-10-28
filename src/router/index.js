@@ -1,4 +1,3 @@
-import * as Vue from 'vue'
 import * as VueRouter from 'vue-router'
 
 const routes = [
@@ -9,7 +8,12 @@ const routes = [
   {
     path: '/home',
     name: 'Home',
-    component: Vue.defineAsyncComponent(() => import('@/views/Home.vue'))
+    component: () => import('@/views/Home.vue')
+  },
+  {
+    path: '/recent',
+    name: 'Recent',
+    component: () => import('@/views/List.vue')
   }
   // {
   //   path: '/materials/:id',

@@ -1,65 +1,45 @@
 <template>
-  <element>
-    <el-header style="background-color: #343a40">
-      <el-row type="flex" class="nav-menu" justify="start">
-        <a class="el-link" href="#/index">
-          <!-- <el-image :src="require('@/assets/logo.png')" style="width: 30px; height: 30px; padding-right: 5px"></el-image> -->
-          Nonlinear Optical</a
-        >
-        <el-menu class="sm-hide" :default-active="'/home'" mode="horizontal" router background-color="#43484d" text-color="#fff" active-text-color="#ffd04b" style="margin-left: 10px">
-          <template v-for="item in menu_items">
-            <el-submenu :index="item.index" v-if="item.submenu" :disabled="item.disabled">
-              <template v-slot:title>{{ item.text }}</template>
-              <el-menu-item :index="it.index" v-for="it in item.items" :key="it.index">{{ it.text }}</el-menu-item>
-            </el-submenu>
-            <el-menu-item :disabled="item.disabled" :index="item.index" v-else>{{ item.text }}</el-menu-item>
-          </template>
-        </el-menu>
-      </el-row>
-    </el-header>
-  </element>
+  <el-header>
+    <el-row type="flex" justify="start">
+      <a href="#/home">
+        <el-image :src="img" style="width: 50px; height: 50px; padding-right: 10px" fit="cover"></el-image>
+      </a>
+      <div class="title">凝聚态物质文献数据库</div>
+      <el-menu :default-active="activePath" mode="horizontal" router background-color="#43484d" text-color="#fff" active-text-color="#ffd04b" :ellipsis="false">
+        <el-menu-item index="/home">
+          <el-icon>
+            <House />
+          </el-icon>
+          主页
+        </el-menu-item>
+        <el-menu-item index="/recent">
+          <el-icon>
+            <Notebook />
+          </el-icon>
+          最近
+        </el-menu-item>
+        <el-menu-item index="/" disabled>
+          <el-icon>
+            <Loading />
+          </el-icon>
+          其他
+        </el-menu-item>
+      </el-menu>
+    </el-row>
+  </el-header>
 </template>
 
 <script>
+import img from '@/assets/logo.png'
 export default {
   name: 'Header',
   data() {
     return {
-      menu_items: [
-        {
-          index: '/home',
-          text: 'Home',
-          submenu: false,
-          disabled: false
-        },
-        {
-          index: '2',
-          text: 'Others',
-          submenu: true,
-          disabled: true,
-          items: [
-            {
-              index: '2-1',
-              text: '数据展示',
-              submenu: true
-            },
-            {
-              index: '/2-2',
-              text: '数据管理',
-              submenu: true
-            },
-            {
-              index: '2-3',
-              text: '登录/注册',
-              submenu: true
-            }
-          ]
-        }
-      ]
+      img: img
     }
   },
   computed: {
-    active_index() {
+    activePath() {
       return this.$route.path
     }
   }
@@ -67,19 +47,21 @@ export default {
 </script>
 
 <style scoped lang="less">
-.nav-menu {
-  border-bottom: solid 1px #e6e6e6 !important;
-  :deep(.el-menu) {
-    border-bottom: 0;
-  }
+.el-menu {
+  border-bottom: 0;
+  margin-left: 10px;
 }
-.el-link {
-  font-size: 1.2rem;
+
+.title {
   color: white;
+  line-height: 60px;
 }
+
 .el-header {
   padding-left: 15px;
+  background-color: #43484d;
 }
+
 // .sm-hide >>> li {
 //   font-size: 1rem;
 // }
