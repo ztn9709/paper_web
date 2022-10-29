@@ -5,9 +5,7 @@
         <h4>Who We Are</h4>
         <ul style="list-style: none; padding-inline-start: 0">
           <li>
-            <el-link href="http://www.iop.cas.cn/" target="_blank"
-              >Institute of Physics,Chinese Academy of Science</el-link
-            >
+            <el-link href="http://www.iop.cas.cn/" target="_blank">Institute of Physics,Chinese Academy of Science</el-link>
           </li>
         </ul>
       </el-col>
@@ -18,6 +16,6 @@
 
 <script>
 export default {
-  name: 'Footer',
+  name: 'Footer'
 }
 </script>
