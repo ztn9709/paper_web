@@ -58,11 +58,11 @@ export default {
 }
 
 .el-header {
-  padding-left: 15px;
   background-color: #43484d;
+  position: fixed;
+  width: 100%;
+  top: 0;
+  left: 0;
+  z-index: 999;
 }
-
-// .sm-hide >>> li {
-//   font-size: 1rem;
-// }
 </style>

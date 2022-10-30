@@ -12,15 +12,10 @@ import Footer from '@/components/Footer.vue'
 import Header from '@/components/Header.vue'
 </script>
 
-<style lang="less">
-h1 {
-  font-weight: 100;
-  i {
-    color: red;
-  }
-}
+<style scoped lang="less">
 .container {
   width: 1080px;
   margin: auto;
+  margin-top: 60px;
 }
 </style>

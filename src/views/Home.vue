@@ -23,17 +23,12 @@
     <el-row>
       <div id="echart-area" style="width: 100%; height: 600px"></div>
       <div id="echart-author" style="width: 100%; height: 600px"></div>
-      <div
-        id="echart-ins"
-        style="width: 100%; height: 600px; overflow: hidden"
-      ></div>
+      <div id="echart-ins" style="width: 100%; height: 600px; overflow: hidden"></div>
     </el-row>
     <el-row :gutter="20">
       <el-col>
         <div>
-          <h3>
-            关键词排名（利用positionrank算法提取每篇文章关键词，按算法给出的权重统计出的前20个）
-          </h3>
+          <h3>关键词排名（利用positionrank算法提取每篇文章关键词，按算法给出的权重统计出的前20个）</h3>
           <h5>参考文献：https://www.aclweb.org/anthology/P17-1102.pdf</h5>
         </div>
       </el-col>
@@ -53,6 +48,7 @@
 
 <script>
 import * as echarts from 'echarts'
+
 export default {
   name: 'Home',
   data() {
@@ -66,7 +62,7 @@ export default {
         'Topological order',
         'Topological phase transition',
         'Topological superconductors',
-        'Topological materials',
+        'Topological materials'
       ],
       positionRank: [
         ['topological phases', 19.83461865040976],
@@ -88,8 +84,8 @@ export default {
         ['topological invariants', 4.108108403368748],
         ['weyl semimetals', 4.107845307686206],
         ['weyl points', 3.975719330957787],
-        ['hermitian systems', 3.871364160234747],
-      ],
+        ['hermitian systems', 3.871364160234747]
+      ]
     }
   },
   methods: {
@@ -103,17 +99,17 @@ export default {
       endDate = endDate.split('T')[0]
       let date = [startDate, endDate]
       const { data: res2 } = await this.axios.get('/api/paper/search', {
-        params: { date },
+        params: { date }
       })
       this.amountLastWeek = res2[0].total[0] ? res2[0].total[0].total : 0
     },
     async areaChart() {
       const params = { classify: 'areas' }
       const { data: res } = await this.axios.get('/api/paper/classify', {
-        params,
+        params
       })
       let data = []
-      res.forEach((item) => {
+      res.forEach(item => {
         if (this.topoAreas.includes(item._id)) {
           data.push({ name: item._id, value: item.value })
         }
@@ -124,16 +120,16 @@ export default {
           text: 'Classified by areas',
           left: 'center',
           textStyle: {
-            fontSize: 24,
+            fontSize: 24
           },
-          top: 25,
+          top: 25
         },
         tooltip: {
-          trigger: 'item',
+          trigger: 'item'
         },
         legend: {
           top: 'bottom',
-          left: 'center',
+          left: 'center'
         },
         series: [
           {
@@ -144,25 +140,25 @@ export default {
             itemStyle: {
               borderRadius: 10,
               borderColor: '#fff',
-              borderWidth: 2,
+              borderWidth: 2
             },
             label: {
               show: false,
-              position: 'center',
+              position: 'center'
             },
             emphasis: {
               label: {
                 show: true,
                 fontSize: '40',
-                fontWeight: 'bold',
-              },
+                fontWeight: 'bold'
+              }
             },
             labelLine: {
-              show: false,
+              show: false
             },
-            data: data,
-          },
-        ],
+            data: data
+          }
+        ]
       }
       myChart.setOption(option)
       //随着屏幕大小调节图表
@@ -179,48 +175,48 @@ export default {
     async authorChart() {
       const params = { classify: 'authors' }
       const { data: res } = await this.axios.get('/api/paper/classify', {
-        params,
+        params
       })
       let data = res.slice(0, 20)
       const myChart = echarts.init(document.getElementById('echart-author'))
       let option = {
         dataset: {
           dimensions: ['_id', 'value'],
-          source: data,
+          source: data
         },
         title: {
           text: 'Author Top 20',
           left: 'center',
           textStyle: {
-            fontSize: 24,
+            fontSize: 24
           },
-          top: 25,
+          top: 25
         },
         tooltip: {
           trigger: 'axis',
           axisPointer: {
-            type: 'shadow',
-          },
+            type: 'shadow'
+          }
         },
         grid: {
           left: '3%',
           right: '4%',
           bottom: '3%',
-          containLabel: true,
+          containLabel: true
         },
         xAxis: {
           type: 'value',
-          boundaryGap: [0, 0.01],
+          boundaryGap: [0, 0.01]
         },
         yAxis: {
           type: 'category',
-          inverse: true,
+          inverse: true
         },
         series: [
           {
-            type: 'bar',
-          },
-        ],
+            type: 'bar'
+          }
+        ]
       }
       myChart.setOption(option)
       //随着屏幕大小调节图表
@@ -237,39 +233,39 @@ export default {
     async insChart() {
       const params = { classify: 'institutes' }
       const { data: res } = await this.axios.get('/api/paper/classify', {
-        params,
+        params
       })
       let data = res.slice(0, 20)
       const myChart = echarts.init(document.getElementById('echart-ins'))
       let option = {
         dataset: {
           dimensions: ['_id', 'value'],
-          source: data,
+          source: data
         },
         title: {
           text: 'Institute Top 20',
           left: 'center',
           textStyle: {
-            fontSize: 24,
+            fontSize: 24
           },
-          top: 25,
+          top: 25
         },
         tooltip: {
           trigger: 'axis',
           axisPointer: {
-            type: 'shadow',
+            type: 'shadow'
           },
-          confine: true,
+          confine: true
         },
         grid: {
           left: '3%',
           right: '4%',
           bottom: '3%',
-          containLabel: true,
+          containLabel: true
         },
         xAxis: {
           type: 'value',
-          boundaryGap: [0, 0.01],
+          boundaryGap: [0, 0.01]
         },
         yAxis: {
           type: 'category',
@@ -277,14 +273,14 @@ export default {
           axisLabel: {
             overflow: 'truncate',
             width: 110,
-            rotate: 15,
-          },
+            rotate: 15
+          }
         },
         series: [
           {
-            type: 'bar',
-          },
-        ],
+            type: 'bar'
+          }
+        ]
       }
       myChart.setOption(option)
       //随着屏幕大小调节图表
@@ -297,17 +293,17 @@ export default {
           myChart.resize()
         }, 200)
       })
-    },
+    }
   },
   created() {
     this.getPaperAmount()
 
-    this.$nextTick((_) => {
+    this.$nextTick(_ => {
       this.areaChart()
       this.authorChart()
       this.insChart()
     })
-  },
+  }
 }
 </script>
 
