@@ -1,10 +1,9 @@
-<template>
-  <Header />
-  <br />
-  <div class="container">
-    <router-view></router-view>
-  </div>
-  <Footer />
+<template lang="pug">
+Header
+br
+.container
+  router-view
+Footer
 </template>
 
 <script setup>

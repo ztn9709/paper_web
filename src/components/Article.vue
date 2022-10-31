@@ -1,27 +1,38 @@
-<template>
-  <el-card class="box-card">
-    <template v-slot:header>
-      <div class="clearfix">
-        <!-- <el-button type="text" @click="dialogTableVisible = true">查看相似文章</el-button>
-                <el-dialog title="Top 10 papers" :visible.sync="dialogTableVisible">
-                  <el-table :data="gridData">
-                    <el-table-column property="title" label="Title" width="400"></el-table-column>
-                    <el-table-column property="similarity" label="Similarity" width="200"></el-table-column>
-                  </el-table>
-                </el-dialog> -->
-        <span>
-          <el-link :href="paper.link" :underline="false" target="_blank" style="color: #3294d8; font-size: 30px">{{ paper.title }}</el-link>
-        </span>
-      </div>
-    </template>
-    <div v-for="(val, key) in paper" :key="key" class="text item">
-      <div v-if="key[0] != '_' && key != 'link' && key != 'title' && key != 'topo_label'">{{ capitalize_filter(key) }} : {{ array2String_filter(val) }}</div>
-    </div>
-  </el-card>
+<template lang="pug">
+el-card.box-card
+  template(#header)
+    .card-header
+      span(style="color: #3294d8; font-size: 30px")
+        | {{ paper.title }}
+      el-button(type="primary" size="large" @click="openLink(paper.link)")
+        | 访问原文
+  .text.item(v-for="(val, key) in paper" :key="key")
+    div(v-if="key[0] != '_' && key != 'link' && key != 'title' && key != 'topo_label' && key != 'institutes'")
+      | {{ capitalize(key) }} : {{ array2string(val) }}
 </template>
 
 <script setup>
-const props = defineProps({
-  paper: Object
-})
+defineProps(['paper'])
+const capitalize = str => str.charAt(0).toUpperCase() + str.slice(1)
+const array2string = val => (Array.isArray(val) ? val.join(', ') : val)
+const openLink = link => window.open(link, '_blank')
 </script>
+
+<style scoped lang="less">
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.text {
+  font-size: 18px;
+  font-family: 'Times New Roman', Georgia, Serif;
+}
+.item {
+  margin-bottom: 18px;
+}
+.box-card {
+  width: 100%;
+}
+</style>

@@ -16,4 +16,5 @@ for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
 app.use(ElementPlus)
 app.use(VueAxios, axios)
 app.use(router)
+app.provide('axios', app.config.globalProperties.axios)
 app.mount('#app')
