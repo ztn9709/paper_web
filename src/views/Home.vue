@@ -28,7 +28,9 @@
     <el-row :gutter="20">
       <el-col>
         <div>
-          <h3>关键词排名（利用positionrank算法提取每篇文章关键词，按算法给出的权重统计出的前20个）</h3>
+          <h3>
+            关键词排名（利用positionrank算法提取每篇文章关键词，按算法给出的权重统计出的前20个）
+          </h3>
           <h5>参考文献：https://www.aclweb.org/anthology/P17-1102.pdf</h5>
         </div>
       </el-col>
@@ -297,12 +299,11 @@ export default {
   },
   created() {
     this.getPaperAmount()
-
-    this.$nextTick(_ => {
-      this.areaChart()
-      this.authorChart()
-      this.insChart()
-    })
+  },
+  mounted() {
+    this.areaChart()
+    this.authorChart()
+    this.insChart()
   }
 }
 </script>

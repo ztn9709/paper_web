@@ -20,9 +20,8 @@
   </el-card>
 </template>
 
-<script>
-export default {
-  name: 'Article',
-  props: ['paper']
-}
+<script setup>
+const props = defineProps({
+  paper: Object
+})
 </script>
