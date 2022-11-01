@@ -7,7 +7,7 @@ el-card.box-card
       el-button(type="primary" @click="openLink(paper.link)")
         | 访问原文
   .text.item(v-for="(val, key) in paper" :key="key")
-    div(v-if="key[0] != '_' && key != 'link' && key != 'title' && key != 'topo_label' && key != 'institutes'")
+    div(v-if="key[0] != '_' && key != 'link' && key != 'title'  && key != 'institutes'")
       | {{ capitalize(key) }} : {{ array2string(val) }}
 </template>
 
