@@ -12,18 +12,50 @@
       <br />
       <div class="date-picker">
         <span class="demonstration">选择时间范围</span>
-        <el-date-picker style="width: auto" v-model="params.date" type="daterange" unlink-panels range-separator="To" start-placeholder="Start date" end-placeholder="End date" :shortcuts="shortcuts" :disabled-date="disabledDate" value-format="YYYY-MM-DD" />
+        <el-date-picker
+          style="width: auto"
+          v-model="params.date"
+          type="daterange"
+          unlink-panels
+          range-separator="To"
+          start-placeholder="Start date"
+          end-placeholder="End date"
+          :shortcuts="shortcuts"
+          :disabled-date="disabledDate"
+          value-format="YYYY-MM-DD"
+        />
       </div>
       <br />
-      <!-- 
-      <div>选择期刊范围</div>
-      <br />
-      <el-checkbox :indeterminate="isIndeterminatePub" v-model:value="checkAllPubs" @change="handleCheckAllPubsChange">全选</el-checkbox>
-      <div style="margin: 15px 0"></div>
-      <el-checkbox-group v-model:value="checkedPubs" @change="handleCheckedPubsChange">
-        <el-checkbox v-for="pub in pubs" :label="pub" :key="pub">{{ pub }}({{ pubCounts[pub] }})</el-checkbox>
+      <div class="demonstration">选择期刊范围</div>
+      <el-checkbox
+        v-model="checkAllPubs"
+        :indeterminate="isIndeterminatePub"
+        @change="handleCheckAllPubsChange"
+      >
+        全选
+      </el-checkbox>
+      <!-- <div style="margin: 15px 0"></div> -->
+      <el-checkbox-group v-model="params.pubs" @change="handleCheckedPubsChange">
+        <el-checkbox v-for="pub in pubs" :label="pub" :key="pub">
+          {{ pub }}({{ pubCounts[pub] }})
+        </el-checkbox>
       </el-checkbox-group>
       <br />
+      <div class="demonstration">选择研究领域范围</div>
+      <el-checkbox
+        v-model="checkAllAreas"
+        :indeterminate="isIndeterminateArea"
+        @change="handleCheckAllAreasChange"
+      >
+        全选
+      </el-checkbox>
+      <!-- <div style="margin: 15px 0"></div> -->
+      <el-checkbox-group v-model="params.areas" @change="handleCheckedAreasChange">
+        <el-checkbox v-for="area in areas" :label="area" :key="area">
+          {{ area }}({{ areaCounts[area] }})
+        </el-checkbox>
+      </el-checkbox-group>
+      <!-- 
       <span>选择研究领域 </span>
       <el-button type="primary" size="small" icon="el-icon-delete" @click="area = 0">取消</el-button>
       <br />
@@ -37,7 +69,12 @@
         <Article v-for="paper in paperList" :key="paper.DOI" :paper="paper" />
       </el-space>
       <br />
-      <el-pagination v-model:current-page="params.page" :page-size="params.size" layout="total, prev, pager, next,jumper" :total="total"></el-pagination>
+      <el-pagination
+        v-model:current-page="params.page"
+        :page-size="params.size"
+        layout="total, prev, pager, next,jumper"
+        :total="total"
+      ></el-pagination>
     </el-col>
   </el-row>
 </template>
@@ -48,22 +85,41 @@ import { inject } from 'vue'
 import { $on, $off, $once, $emit } from '../utils/gogocodeTransfer'
 import Article from '../components/Article.vue'
 const axios = inject('axios')
-const pubOptions = ['Physical Review B', 'Physical Review Letters', 'Physical Review Research', 'Physical Review A', 'Reviews of Modern Physics']
-const areaOptions = ['Topological phases of matter', 'Symmetry protected topological states', 'Topological insulators', 'Topological order', 'Topological phase transition', 'Topological superconductors', 'Topological materials']
+const pubs = ref([])
+const areas = ref([])
+// const pubs = [
+//   'Physical Review B',
+//   'Physical Review Letters',
+//   'Physical Review Research',
+//   'Physical Review A',
+//   'Reviews of Modern Physics'
+// ]
+// const areaOptions = [
+//   'Topological phases of matter',
+//   'Symmetry protected topological states',
+//   'Topological insulators',
+//   'Topological order',
+//   'Topological phase transition',
+//   'Topological superconductors',
+//   'Topological materials'
+// ]
 const params = reactive({
   page: 1,
   size: 10,
   date: null,
-  pubs: pubOptions,
-  area: '',
+  pubs: pubs.value,
+  areas: areas.value,
   text: ''
 })
 const input = ref('')
 const paperList = ref([])
 const total = ref(0)
-const disabledDate = time => {
-  return time.getTime() > Date.now()
-}
+const pubCounts = ref({})
+const areaCounts = ref({})
+const checkAllPubs = ref(true)
+const checkAllAreas = ref(true)
+const isIndeterminatePub = ref(false)
+const isIndeterminateArea = ref(false)
 const shortcuts = [
   {
     text: 'Last week',
@@ -93,45 +149,60 @@ const shortcuts = [
     }
   }
 ]
+const disabledDate = time => {
+  return time.getTime() > Date.now()
+}
+;(async () => {
+  const { data } = await axios.get('/api/paper/classify', { params: { classify: 'publication' } })
+  pubs.value = data.map(item => item._id)
+  params.pubs = pubs.value
+})()
+;(async () => {
+  const { data } = await axios.get('/api/paper/classify', { params: { classify: 'areas' } })
+  areas.value = data.map(item => item._id)
+  console.log(data)
+  params.areas = areas.value
+})()
 watchEffect(async () => {
   const { data } = await axios.get('/api/paper/search', { params })
-  if (data[0].data.length == 0 || params.pubs.length == 0) {
+  if (data[0].data.length == 0 || params.pubs.length == 0 || params.areas.length == 0) {
     paperList.value = []
     total.value = 0
-    // this.pubCounts = {}
-    // this.areaCounts = {}
+    pubCounts.value = {}
+    areaCounts.value = {}
   } else {
     paperList.value = data[0].data
     total.value = data[0].total[0].total
-    // this.pubCounts = {}
-    // this.areaCounts = {}
-    // res[0].groupPub.forEach(item => {
-    //   this.pubCounts[item._id] = item.value
-    // })
-    // res[0].groupArea.forEach(item => {
-    //   if (areaOptions.includes(item._id)) {
-    //     this.areaCounts[item._id] = item.value
-    //   }
-    // })
+    pubCounts.value = {}
+    areaCounts.value = {}
+    data[0].groupPub.forEach(item => {
+      pubCounts.value[item._id] = item.value
+    })
+    data[0].groupArea.forEach(item => {
+      areaCounts.value[item._id] = item.value
+    })
   }
   document.documentElement.scrollTop = 0
 })
-//     return {
-//       checkAllPubs: true,
-//       isIndeterminatePub: false,
-//       dialogTableVisible: false,
-
-//     handleCheckAllPubsChange(val) {
-//       this.checkedPubs = val ? pubOptions : []
-//       this.isIndeterminatePub = false
-//     },
-//     handleCheckedPubsChange(value) {
-//       let checkedCount = value.length
-//       this.checkAllPubs = checkedCount === this.pubs.length
-//       this.isIndeterminatePub = checkedCount > 0 && checkedCount < this.pubs.length
-//     }
-//   }
-// }
+// dialogTableVisible: false,
+const handleCheckAllPubsChange = val => {
+  params.pubs = val ? pubs.value : []
+  isIndeterminatePub.value = false
+}
+const handleCheckAllAreasChange = val => {
+  params.areas = val ? areas.value : []
+  isIndeterminateArea.value = false
+}
+const handleCheckedPubsChange = value => {
+  let checkedCount = value.length
+  checkAllPubs.value = checkedCount === pubs.value.length
+  isIndeterminatePub.value = checkedCount > 0 && checkedCount < pubs.value.length
+}
+const handleCheckedAreasChange = value => {
+  let checkedCount = value.length
+  checkAllAreas.value = checkedCount === areas.value.length
+  isIndeterminateArea.value = checkedCount > 0 && checkedCount < areas.value.length
+}
 </script>
 
 <style scoped lang="less">

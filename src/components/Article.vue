@@ -2,9 +2,9 @@
 el-card.box-card
   template(#header)
     .card-header
-      span(style="color: #3294d8; font-size: 30px")
+      span(style="color: #3294d8; font-size: 24px")
         | {{ paper.title }}
-      el-button(type="primary" size="large" @click="openLink(paper.link)")
+      el-button(type="primary" @click="openLink(paper.link)")
         | 访问原文
   .text.item(v-for="(val, key) in paper" :key="key")
     div(v-if="key[0] != '_' && key != 'link' && key != 'title' && key != 'topo_label' && key != 'institutes'")
