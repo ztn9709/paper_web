@@ -1,15 +1,27 @@
 <template>
+  <el-row>
+    <div style="margin-bottom: 20px; font-size: 26px; font-weight: bold">
+      {{ total }}条来自凝聚态文献数据库的结果：
+    </div>
+    <el-input placeholder="请输入关键词" v-model="input" clearable @change="search">
+      <template #prepend>
+        <el-select v-model="select" placeholder="Select" style="width: 115px">
+          <el-option label="Title/Abstract" value="text" />
+          <el-option label="Author" value="authors" />
+          <el-option label="DOI" value="DOI" />
+        </el-select>
+      </template>
+      <template #append>
+        <el-button type="primary">
+          <Search style="width: 1em; height: 1em; margin-right: 6px" />
+          搜索
+        </el-button>
+      </template>
+    </el-input>
+    <el-divider />
+  </el-row>
   <el-row :gutter="20">
     <el-col :span="6">
-      <div class="demonstration">选择搜索条件</div>
-      <el-input placeholder="请输入关键词" v-model="input" clearable>
-        <template #suffix>
-          <el-button @click="params.text = input" type="primary">
-            <el-icon><Search /></el-icon>
-          </el-button>
-        </template>
-      </el-input>
-      <el-divider border-style="dashed" />
       <div class="date-picker">
         <span class="demonstration">选择时间范围</span>
         <el-date-picker
@@ -54,6 +66,13 @@
       />
     </el-col>
     <el-col :span="18">
+      <el-radio-group v-model="params.sort" size="small">
+        <el-radio-button label="">默认</el-radio-button>
+        <el-radio-button label="-1">时间降序</el-radio-button>
+        <el-radio-button label="1">时间升序</el-radio-button>
+      </el-radio-group>
+      <br />
+      <br />
       <el-space direction="vertical">
         <Article v-for="paper in paperList" :key="paper.DOI" :paper="paper" />
       </el-space>
@@ -100,9 +119,11 @@ const params = reactive({
   subs: [],
   pubs: [],
   areas: [],
-  text: ''
+  reg: { text: '' },
+  sort: ''
 })
 const input = ref('')
+const select = ref('text')
 const total = ref(0)
 const subCounts = ref({})
 const pubCounts = ref({})
@@ -139,6 +160,9 @@ const shortcuts = [
 const disabledDate = time => {
   return time.getTime() > Date.now()
 }
+const search = () => {
+  params.reg = { [select.value]: input.value }
+}
 //侦听params变化，请求文章数据
 watchEffect(async () => {
   const { data } = await axios.get('/api/paper/search', { params })
@@ -172,7 +196,7 @@ watchEffect(async () => {
 .demonstration {
   // text-align: center;
   display: block;
-  color: #303133;
+  // color: #303133;
   font-size: 14px;
   margin-bottom: 20px;
 }
