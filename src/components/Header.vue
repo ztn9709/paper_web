@@ -6,16 +6,13 @@ el-header
     .title 凝聚态物质文献数据库
     el-menu(:default-active="activePath" mode="horizontal" router background-color="#43484d" text-color="#fff" active-text-color="#ffd04b" :ellipsis="false")
       el-menu-item(index="/home")
-        el-icon
-          House
+        House.icon
         | 主页
-      el-menu-item(index="/recent")
-        el-icon
-          Notebook
-        | 最近
+      el-menu-item(index="/search")
+        Search.icon
+        | 搜索
       el-menu-item(index="/" disabled)
-        el-icon
-          Loading
+        Loading.icon
         | 其他
 </template>
 
@@ -31,12 +28,10 @@ const activePath = computed(() => useRoute().path)
   border-bottom: 0;
   margin-left: 10px;
 }
-
 .title {
   color: white;
   line-height: 60px;
 }
-
 .el-header {
   background-color: #43484d;
   position: fixed;

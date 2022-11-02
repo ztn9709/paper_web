@@ -16,19 +16,27 @@ div
           | {{ amountLastWeek }}
         span 篇
   el-row
-    #echart-area(style="width: 100%; height: 600px")
+    #echart-area(style="width: 100%; height: 600px" v-loading="loading" element-loading-text="Loading...")
     #echart-author(style="width: 100%; height: 600px")
     #echart-ins(style="width: 100%; height: 600px; overflow: hidden")
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
-import { inject } from 'vue'
+import { ref, onMounted, inject } from 'vue'
 import * as echarts from 'echarts'
 const axios = inject('axios')
-const topoAreas = ['Topological phases of matter', 'Symmetry protected topological states', 'Topological insulators', 'Topological order', 'Topological phase transition', 'Topological superconductors', 'Topological materials']
+const topoAreas = [
+  'Topological phases of matter',
+  'Symmetry protected topological states',
+  'Topological insulators',
+  'Topological order',
+  'Topological phase transition',
+  'Topological superconductors',
+  'Topological materials'
+]
 const amount = ref(0)
 const amountLastWeek = ref(0)
+const loading = ref(true)
 const getAmount = async () => {
   const { data } = await axios.get('/api/paper/search')
   amount.value = data[0].total[0].total
@@ -234,6 +242,7 @@ onMounted(() => {
   areaChart()
   authorChart()
   insChart()
+  loading.value = false
 })
 </script>
 

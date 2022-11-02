@@ -11,9 +11,9 @@ const routes = [
     component: () => import('@/views/Home.vue')
   },
   {
-    path: '/recent',
-    name: 'Recent',
-    component: () => import('@/views/List.vue')
+    path: '/search',
+    name: 'Search',
+    component: () => import('@/views/Search.vue')
   }
   // {
   //   path: '/materials/:id',

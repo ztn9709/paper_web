@@ -1,7 +1,7 @@
 <template lang="pug">
 Header
 br
-.container
+#main
   router-view
 Footer
 </template>
@@ -11,15 +11,15 @@ import Footer from '@/components/Footer.vue'
 import Header from '@/components/Header.vue'
 </script>
 
-<style scoped lang="less">
-.container {
+<style lang="less">
+#main {
   width: 1080px;
   margin: auto;
   margin-top: 60px;
 }
-</style>
-<!-- <style>
-body {
-  background-color: #f0f2f5;
+.icon {
+  width: 1em;
+  height: 1em;
+  margin-right: 6px;
 }
-</style> -->
+</style>
