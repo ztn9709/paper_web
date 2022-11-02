@@ -18,3 +18,8 @@ import Header from '@/components/Header.vue'
   margin-top: 60px;
 }
 </style>
+<!-- <style>
+body {
+  background-color: #f0f2f5;
+}
+</style> -->

@@ -1,22 +1,26 @@
 <template>
-  <el-checkbox v-model="checkAll" :indeterminate="isIndeterminate" @change="handleCheckAllChange">All({{ total }})</el-checkbox>
+  <el-checkbox v-model="checkAll" :indeterminate="isIndeterminate" @change="handleCheckAllChange">
+    All({{ total }})
+  </el-checkbox>
   <el-checkbox-group v-model="checkedList" @change="handleCheckedChange">
-    <el-checkbox v-for="opt in optList" :label="opt" :key="opt">{{ opt }}({{ optCounts[opt] }})</el-checkbox>
+    <el-checkbox v-for="opt in optList" :label="opt" :key="opt">
+      {{ opt }}({{ optCounts[opt] }})
+    </el-checkbox>
   </el-checkbox-group>
 </template>
 
 <script setup>
-import { defineEmits } from 'vue'
-import { ref, watch, toRef } from 'vue'
+import { ref, watch, defineEmits, computed } from 'vue'
 const props = defineProps(['optList', 'checkedList', 'optCounts', 'total'])
 const emit = defineEmits(['checkedChange'])
 const checkedList = ref(props.checkedList)
-
-// const newlist = ref(
-//   props.optList.sort((a, b) => {
-//     return props.optCounts[b] - props.optCounts[a]
-//   })
-// )
+const optList = computed(() => {
+  return props.optList.sort((a, b) => {
+    let x = props.optCounts[b] ? props.optCounts[b] : 0
+    let y = props.optCounts[a] ? props.optCounts[a] : 0
+    return x - y
+  })
+})
 const checkAll = ref(true)
 const isIndeterminate = ref(false)
 const handleCheckAllChange = val => {

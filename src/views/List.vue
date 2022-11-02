@@ -1,7 +1,7 @@
 <template>
   <el-row :gutter="20">
-    <el-col :span="7" style="border: 2px solid black">
-      <br />
+    <el-col :span="6">
+      <div class="demonstration">选择搜索条件</div>
       <el-input placeholder="请输入关键词" v-model="input" clearable>
         <template #suffix>
           <el-button @click="params.text = input" type="primary">
@@ -9,28 +9,61 @@
           </el-button>
         </template>
       </el-input>
-      <br />
-      <br />
+      <el-divider border-style="dashed" />
       <div class="date-picker">
         <span class="demonstration">选择时间范围</span>
-        <el-date-picker style="width: auto" v-model="params.date" type="daterange" unlink-panels range-separator="To" start-placeholder="Start date" end-placeholder="End date" :shortcuts="shortcuts" :disabled-date="disabledDate" value-format="YYYY-MM-DD" />
+        <el-date-picker
+          style="width: auto"
+          v-model="params.date"
+          type="daterange"
+          unlink-panels
+          range-separator="To"
+          start-placeholder="Start date"
+          end-placeholder="End date"
+          :shortcuts="shortcuts"
+          :disabled-date="disabledDate"
+          value-format="YYYY-MM-DD"
+        />
       </div>
-      <br />
+      <el-divider border-style="dashed" />
       <div class="demonstration">选择主题范围</div>
-      <Checkbox :total="total" :optList="subList" :checkedList="params.subs" :optCounts="subCounts" @checkedChange="val => (params.subs = val)" />
-      <br />
+      <Checkbox
+        :total="total"
+        :optList="subList"
+        :checkedList="params.subs"
+        :optCounts="subCounts"
+        @checkedChange="val => (params.subs = val)"
+      />
+      <el-divider border-style="dashed" />
       <div class="demonstration">选择期刊范围</div>
-      <Checkbox :total="total" :optList="pubList" :checkedList="params.pubs" :optCounts="pubCounts" @checkedChange="val => (params.pubs = val)" />
-      <br />
+      <Checkbox
+        :total="total"
+        :optList="pubList"
+        :checkedList="params.pubs"
+        :optCounts="pubCounts"
+        @checkedChange="val => (params.pubs = val)"
+      />
+      <el-divider border-style="dashed" />
       <div class="demonstration">选择研究领域范围</div>
-      <Checkbox :total="total" :optList="areaList" :checkedList="params.areas" :optCounts="areaCounts" @checkedChange="val => (params.areas = val)" />
+      <Checkbox
+        :total="total"
+        :optList="areaList"
+        :checkedList="params.areas"
+        :optCounts="areaCounts"
+        @checkedChange="val => (params.areas = val)"
+      />
     </el-col>
-    <el-col :span="17">
+    <el-col :span="18">
       <el-space direction="vertical">
         <Article v-for="paper in paperList" :key="paper.DOI" :paper="paper" />
       </el-space>
       <br />
-      <el-pagination v-model:current-page="params.page" :page-size="params.size" layout="total, prev, pager, next,jumper" :total="total"></el-pagination>
+      <el-pagination
+        v-model:current-page="params.page"
+        :page-size="params.size"
+        layout="total, prev, pager, next,jumper"
+        :total="total"
+      ></el-pagination>
     </el-col>
   </el-row>
 </template>
@@ -38,7 +71,7 @@
 <script setup>
 import { reactive, ref, watchEffect } from 'vue'
 import { inject } from 'vue'
-import Article from '../components/Article.vue'
+import Article from '@/components/Article.vue'
 import Checkbox from '@/components/Checkbox.vue'
 const axios = inject('axios')
 const subList = ref([])
@@ -131,22 +164,29 @@ watchEffect(async () => {
       areaCounts.value[item._id] = item.value
     })
   }
-  document.documentElement.scrollTop = 0
+  // document.documentElement.scrollTop = 0
 })
 </script>
 
 <style scoped lang="less">
 .demonstration {
-  text-align: center;
+  // text-align: center;
   display: block;
-  color: var(--el-text-color-secondary);
+  color: #303133;
   font-size: 14px;
   margin-bottom: 20px;
 }
+// .sidebar {
+//   border: 1px solid #cdd0d6;
+// }
 :deep(.el-input__wrapper) {
   padding-right: 0;
 }
-:deep(.el-checkbox__label) {
-  font-size: 12px;
+:deep(.el-checkbox) {
+  display: block;
+  .el-checkbox__label {
+    font-size: 12px;
+    white-space: normal;
+  }
 }
 </style>
