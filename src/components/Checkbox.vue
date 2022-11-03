@@ -7,7 +7,7 @@ el-checkbox-group(v-model="checkedList" @change="handleCheckedChange")
 </template>
 
 <script setup>
-import { ref, watch, defineEmits, computed } from 'vue'
+import { ref, watch, computed } from 'vue'
 const props = defineProps(['optList', 'checkedList', 'optCounts', 'total'])
 const emit = defineEmits(['checkedChange'])
 const checkedList = ref(props.checkedList)
