@@ -10,7 +10,7 @@ el-row
         el-option(label="DOI" value="DOI")
     template(#append)
       el-button(@click="warning")
-        Search(class="icon")
+        Search.icon
         | Search
 br
 el-row(:gutter="20")
@@ -18,22 +18,22 @@ el-row(:gutter="20")
     el-collapse(v-model="activeNames")
       el-collapse-item(name="1")
         template(#title)
-          Calendar(class="icon")
+          Calendar.icon
           | Date
         el-date-picker(style="width: auto" v-model="params.date" type="daterange" unlink-panels range-separator="To" start-placeholder="Start date" end-placeholder="End date" :shortcuts="shortcuts" :disabled-date="disabledDate" value-format="YYYY-MM-DD")
       el-collapse-item(name="2")
         template(#title)
-          Files(class="icon")
+          Files.icon
           | Subjects
         Checkbox(:total="total" :optList="subList" :checkedList="params.subs" :optCounts="subCounts" @checkedChange="val => (params.subs = val)")
       el-collapse-item(name="3")
         template(#title)
-          Collection(class="icon")
+          Collection.icon
           | Journals
         Checkbox(:total="total" :optList="pubList" :checkedList="params.pubs" :optCounts="pubCounts" @checkedChange="val => (params.pubs = val)")
       el-collapse-item(name="4")
         template(#title)
-          PieChart(class="icon")
+          PieChart.icon
           | Research Areas
         Checkbox(:total="total" :optList="areaList" :checkedList="params.areas" :optCounts="areaCounts" @checkedChange="val => (params.areas = val)")
   el-col(:span="18" v-loading="loading" element-loading-text="Loading...")
