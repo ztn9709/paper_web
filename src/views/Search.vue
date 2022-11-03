@@ -2,9 +2,9 @@
 el-row
   div(style="margin-bottom: 20px; font-size: 26px; font-weight: bold")
     | {{ total }}条来自凝聚态文献数据库的结果：
-  el-input(placeholder="Please Input" v-model="input" clearable @change="search")
+  el-input(placeholder="Please Input" v-model="input" clearable @change="text = { [select]: input }")
     template(#prepend)
-      el-select(v-model="select" style="width: 125px")
+      el-select(v-model="select" style="width: 125px" @change="input='';text = { [select]: input }")
         el-option(label="Title/Abstract" value="text")
         el-option(label="Author" value="authors")
         el-option(label="DOI" value="DOI")
@@ -84,9 +84,9 @@ const params = reactive({
   subs: [],
   pubs: [],
   areas: [],
-  reg: { text: '' },
   sort: ''
 })
+const text = ref({})
 const input = ref('')
 const select = ref('text')
 const total = ref(0)
@@ -127,9 +127,6 @@ const shortcuts = [
 const disabledDate = time => {
   return time.getTime() > Date.now()
 }
-const search = () => {
-  params.reg = { [select.value]: input.value }
-}
 const warning = () => {
   if (input.value == '') {
     ElMessage({
@@ -142,7 +139,9 @@ const warning = () => {
 //侦听params变化，请求文章数据
 watchEffect(async () => {
   loading.value = true
-  const { data } = await axios.get('/api/paper/search', { params })
+  const { data } = await axios.get('/api/paper/search', {
+    params: { ...params, ...text.value }
+  })
   if (data[0].data.length == 0) {
     paperList.value = []
     total.value = 0
